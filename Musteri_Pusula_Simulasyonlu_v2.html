@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Müşteri Pusula – Simülasyonlu v2 (2K Eğitim Danışmanlık | Koray Karataş)</title>
+<meta name="description" content="Soru setleri + açıklamalı ipuçları + aksiyon odaklı simülasyon planı.">
+<meta name="theme-color" content="#004481">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>'>
+<style>
+  :root{--brand:#004481;--ink:#0f172a;--muted:#6b7280;--border:#cfe8ff;--radius:14px;--shadow:0 8px 24px rgba(0,0,0,.08);}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+  .wrap{max-width:1000px;margin:0 auto;padding:16px}
+  header{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+  .brand{font-weight:700;color:var(--brand);font-size:14px;letter-spacing:.4px;text-transform:uppercase;text-align:center}
+  h1{font-size:22px;margin:0;color:var(--brand);text-align:center}
+  .subtitle{color:var(--muted);font-size:13px;text-align:center}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media (max-width:720px){ .grid{grid-template-columns:1fr} }
+  .card{border:2px solid var(--border);border-radius:var(--radius);padding:12px;background:#fff;box-shadow:var(--shadow); position:relative}
+  .card h2{font-size:16px;margin:0 0 8px;color:var(--brand);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+  .bubble{display:inline-block;background:#eef6ff;color:#0b3b69;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:12px}
+  .row{display:flex;gap:8px}.row>*{flex:1}
+  label{display:block;font-size:13px;color:var(--muted);margin:6px 0 2px}
+  input[type="text"],input[type="number"],select,textarea{width:100%;padding:9px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:14px}
+  textarea{min-height:76px;resize:vertical}
+  .center{display:flex;flex-direction:column;gap:8px;border:2px dashed var(--border);border-radius:var(--radius);padding:12px;background:#fbfdff;box-shadow:var(--shadow)}
+  .actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+  button,.btn{appearance:none;border:none;background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+  .btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+  .muted{color:var(--muted);font-size:12px;text-align:center;margin-top:6px}
+  footer{margin:18px 0 8px;text-align:center;color:var(--muted);font-size:12px}
+  .tip{font-size:12px;color:#0b3b69;background:#eef6ff;border:1px solid var(--border);padding:6px 8px;border-radius:10px;margin-top:8px}
+  .qs{margin-top:8px;border-top:1px dashed var(--border);padding-top:8px}
+  .qs h3{margin:0 0 6px;font-size:13px;color:#0b3b69}
+  .qs label{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#111827}
+  .qs input[type=checkbox]{margin-top:3px}
+  .wm{position:fixed;inset:auto 12px 10px auto;opacity:.08;font-size:64px;color:var(--brand);user-select:none;pointer-events:none}
+  /* Simulation block */
+  .sim{margin-top:16px;border:2px solid var(--border);border-radius:14px;padding:12px;background:#f8fbff;box-shadow:var(--shadow)}
+  .sim h3{margin:0 0 8px;font-size:16px;color:#004481}
+  .note{font-size:12px;color:#b91c1c}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:12px;margin-right:6px;white-space:nowrap}
+  .bars{display:flex;gap:6px;margin-top:6px}
+  .bar{height:8px;border-radius:6px;background:#e5e7eb;flex:1;position:relative;overflow:hidden}
+  .bar>span{position:absolute;left:0;top:0;bottom:0;background:#0ea5e9}
+  .line{margin:8px 0;border-top:1px dashed #cbd5e1}
+  /* Print */
+  @media print{ #gate,.actions,.subtitle{display:none!important} .wrap{max-width:100%;padding:0} .grid{grid-template-columns:repeat(2,1fr);gap:10px} .card{break-inside:avoid} }
+  /* Gate */
+  #gate{position:fixed;inset:0;background:rgba(255,255,255,.96);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:9999}
+  #gate .box{width:min(460px,92vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:var(--shadow);padding:18px}
+  #gate h3{margin:0 0 8px;color:var(--brand)}
+  #gate p{margin:0 0 10px;color:#334155}
+  .err{color:#b91c1c;font-size:13px;min-height:16px}
+</style>
+</head>
+<body>
+<div class="wm">2K Eğitim Danışmanlık</div>
+
+<!-- Password gate -->
+<div id="gate" aria-modal="true" role="dialog">
+  <div class="box">
+    <h3>🧭 Müşteri Pusula — Erişim</h3>
+    <p>Bu içerik 2K Eğitim Danışmanlık | Koray Karataş tarafından korunmaktadır. Lütfen 4 haneli şifreyi girin.</p>
+    <label for="pw">Şifre</label>
+    <input id="pw" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" style="width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px">
+    <div class="err" id="pwErr"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="btn-outline" id="pwCancel">Kapat</button>
+      <button id="pwOk">Giriş</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="brand">2K Eğitim Danışmanlık | Koray Karataş</div>
+    <h1>Müşteri Pusula • Simülasyonlu v2</h1>
+    <div class="subtitle">“Pusulayı doldururken öğren — soru setleri + açıklamalar + **aksiyon planı**.”</div>
+  </header>
+
+  <div class="grid">
+    <!-- Kuzey -->
+    <section class="card" id="kuzey">
+      <h2>Kuzey — Müşteri Profili <span class="bubble">Demografik + Psikografik</span></h2>
+      <div class="row">
+        <div><label>Yaş</label><input type="number" id="yas" min="18" max="100" placeholder="Örn. 42"></div>
+        <div><label>Cinsiyet</label><select id="cinsiyet"><option value="" selected disabled>Seçin…</option><option>Kadın</option><option>Erkek</option><option>Belirtmek istemiyor</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>Meslek</label><input type="text" id="meslek" placeholder="Örn. İşletme sahibi"></div>
+        <div><label>Gelir</label><select id="gelir"><option value="" selected disabled>Seçin…</option><option>Düşük</option><option>Orta</option><option>Yüksek</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>Risk Toleransı</label><select id="risk"><option value="" selected disabled>Seçin…</option><option>Muhafazakâr</option><option>Dengeli</option><option>Risksever</option></select></div>
+        <div><label>Kültürel Eğilim</label><select id="kulturel"><option value="" selected disabled>Seçin…</option><option>Altın</option><option>Gayrimenkul</option><option>Teknoloji/Borsa</option><option>Kripto</option></select></div>
+      </div>
+      <div class="tip">Metafor: Araba — fren (güvenlik) vs gaz (hız). Refleks hangi pedalda?</div>
+      <div class="qs" id="qs-kuzey">
+        <h3>Soru Seti (Kuzey)</h3>
+        <label><input type="checkbox" value="1"> “Kayıp” kelimesine güçlü tepki veriyor mu?</label>
+        <label><input type="checkbox" value="1"> “Uzman yapsın” eğilimi var mı?</label>
+        <label><input type="checkbox" value="1"> İlk tercihi mevduat/altın mı?</label>
+        <label><input type="checkbox" value="1"> Önce “risk”i, sonra “fırsat”ı soruyor mu?</label>
+        <label><input type="checkbox" value="1"> Aile/çevre görüşü belirleyici mi?</label>
+      </div>
+      <label>İtiraz (Kuzey)</label><input type="text" id="itiraz_kuzey" placeholder="Örn. ‘Faiz yüksek, girmeyelim’">
+    </section>
+
+    <!-- Doğu -->
+    <section class="card" id="dogu">
+      <h2>Doğu — Ekosistem <span class="bubble">Kiminle karar?</span></h2>
+      <label>Meslek Tipi</label>
+      <select id="meslekSecim"><option value="" selected disabled>Seçin…</option><option>Çiftçi</option><option>Tüccar</option><option>Yatırımcı</option><option>Aile Şirketi</option><option>Profesyonel</option></select>
+      <label>Kimin etkisi altında?</label><input type="text" id="etki" placeholder="Eş, ortak, pazar, tedarikçi...">
+      <div class="tip">Güç dengesi + veto kimde? Ekosistem dili ürün dilinden güçlüdür.</div>
+      <div class="qs" id="qs-dogu">
+        <h3>Soru Seti (Doğu)</h3>
+        <label><input type="checkbox" value="1"> Kararı mutlaka biriyle istişare eder mi?</label>
+        <label><input type="checkbox" value="1"> “Ortak/eş ne der?” sorusu sık mı?</label>
+        <label><input type="checkbox" value="1"> Piyasa dalgaları mesleğini doğrudan etkiliyor mu?</label>
+        <label><input type="checkbox" value="1"> Prestij/güven göstergeleri (marka/kurum) kritik mi?</label>
+      </div>
+      <label>İtiraz (Doğu)</label><input type="text" id="itiraz_dogu" placeholder="Örn. ‘Eşim istemez, ortağım karşı’">
+    </section>
+
+    <!-- Güney -->
+    <section class="card" id="guney">
+      <h2>Güney — Finansal Konum <span class="bubble">Nerede duruyor?</span></h2>
+      <label>Genel Durum</label>
+      <select id="finans"><option value="" selected disabled>Seçin…</option><option>Nakit Ağırlıklı</option><option>Borç Baskın</option><option>Portföy Var (Çeşit istiyor)</option></select>
+      <div class="row">
+        <div><label>Nakit (%)</label><input type="number" id="nakitYuzde" min="0" max="100" placeholder="0–100"></div>
+        <div><label>Borç (%)</label><input type="number" id="borcYuzde" min="0" max="100" placeholder="0–100"></div>
+        <div><label>Portföy (%)</label><input type="number" id="portfoyYuzde" min="0" max="100" placeholder="0–100"></div>
+      </div>
+      <div class="tip">Nakit↑=güven arayışı; Borç↑=rahatlama ihtiyacı; Portföy↑=çeşitlendirme/çatı planı.</div>
+      <label>İtiraz (Güney)</label><input type="text" id="itiraz_guney" placeholder="Örn. ‘Likidite bozulur, borcu çeviremem’">
+    </section>
+
+    <!-- Batı -->
+    <section class="card" id="bati">
+      <h2>Batı — Hedefler <span class="bubble">Ne istiyor?</span></h2>
+      <label>Ana Hedef</label>
+      <select id="hedef"><option value="" selected disabled>Seçin…</option><option>Koruma</option><option>Büyütme</option><option>Kayıp Telafi</option></select>
+      <label>Hedef Yazısı</label><textarea id="hedefYazi" placeholder="Emeklilik, ev, pasif gelir…"></textarea>
+      <div class="tip">Koruma→kalkan; Büyüme→yol haritası; Telafi→davranışsal fren.</div>
+      <label>İtiraz (Batı)</label><input type="text" id="itiraz_bati" placeholder="Örn. ‘Geç kaldım, nasıl yetişir?’">
+    </section>
+  </div>
+
+  <!-- Merkez -->
+  <section class="center" id="merkez" style="margin-top:14px">
+    <h2>Merkez — Uygulama Yöntemi (Nasıl)</h2>
+    <textarea id="nasil" placeholder="Öneri / yaklaşım / eylem adımı…"></textarea>
+    <div class="qs" id="qs-merkez">
+      <h3>Soru Seti (Merkez)</h3>
+      <label><input type="checkbox" value="1"> Ücret/komisyon şeffaflığı bekliyor mu?</label>
+      <label><input type="checkbox" value="1"> Kısa bir eğitim/brief talep ediyor mu?</label>
+      <label><input type="checkbox" value="1"> Küçük bir denemeyle başlamak istiyor mu?</label>
+      <label><input type="checkbox" value="1"> Düzenli rapor/geri bildirim bekliyor mu?</label>
+      <label><input type="checkbox" value="1"> Dijital kanalları tercih ediyor mu?</label>
+    </div>
+    <label>İtiraz (Merkez)</label><input type="text" id="itiraz_merkez" placeholder="Örn. ‘Zamanım yok, uğraşamam’">
+  </section>
+
+  <div class="actions">
+    <button id="btnSim">Simülasyonu Çalıştır</button>
+    <button id="btnPdf">PDF İndir</button>
+    <button class="btn" id="btnCsv">CSV İndir</button>
+    <button class="btn-outline" id="btnTemizle">Formu Temizle</button>
+  </div>
+
+  <div class="sim" id="simOut" style="display:none">
+    <h3>Simülasyon Sonucu <span class="badge">Eğitim amaçlıdır; yatırım tavsiyesi değildir.</span></h3>
+    <div id="simNarrative" style="font-size:14px;margin-bottom:8px"></div>
+    <div id="bars" class="bars" aria-label="Skor barları"></div>
+    <div class="line"></div>
+    <div id="simPlan"></div>
+    <div class="line"></div>
+    <div id="itirazView"></div>
+    <div class="note" style="margin-top:8px">Bu bir simülasyondur; eğitim amaçlıdır ve yatırım tavsiyesi değildir.</div>
+  </div>
+
+  <div class="muted">Veri tarayıcıda tutulur; sunucuya gönderilmez. © 2K Eğitim Danışmanlık | Koray Karataş</div>
+  <footer>Bu içerik 5846 sayılı FSEK kapsamındadır. <strong>İzinsiz kopyalanamaz, çoğaltılamaz, dağıtılamaz.</strong><br>© 2K Eğitim Danışmanlık | Koray Karataş — Tüm hakları saklıdır.</footer>
+</div>
+
+<script>
+  // Password gate (2468)
+  (function(){const ok=document.getElementById('pwOk'),cancel=document.getElementById('pwCancel'),input=document.getElementById('pw'),err=document.getElementById('pwErr'),gate=document.getElementById('gate');function check(){if(input.value==='2468'){gate.style.display='none';}else{err.textContent='Şifre hatalı. Tekrar deneyin.';input.focus();input.select();}}ok.addEventListener('click',check);input.addEventListener('keydown',e=>{if(e.key==='Enter')check();});cancel.addEventListener('click',()=>location.href='https://google.com');})();
+
+  function score(id){return [...document.querySelectorAll('#'+id+' input[type=checkbox]:checked')].length;}
+  function v(id){const el=document.getElementById(id);return el?el.value:'';}
+
+  function narrativeFromScores(scores){
+    const labels={Kuzey:'Profil (Kimlik)',Doğu:'Ekosistem',Güney:'Finansal konum',Batı:'Hedefler'};
+    const sorted=[...scores].sort((a,b)=>b.v-a.v);
+    const top=sorted[0], second=sorted[1];
+    const commentTop={
+      'Kuzey':'Profil dili baskın: güven ve çerçeveleme ile ilerleyin.',
+      'Doğu':'Sosyal/onay ihtiyacı yüksek: paydaş buy-in şart.',
+      'Güney':'Mevcut pozisyon baskın: likidite/borç gerçekleri karar dilini belirler.',
+      'Batı':'Hedef dili baskın: yol haritası ve takvim motivasyonu artırır.'
+    }[top.k];
+    const tie = (top.v===second.v) ? ` (Not: ${top.k} ile ${second.k} skorları yakın; dilinizi iki eksende kurun.)` : '';
+    return `Baskın yön: <strong>${top.k}</strong> — ${commentTop}${tie}`;
+  }
+
+  function barHtml(scores){
+    const max=Math.max(...scores.map(s=>s.v),1);
+    return scores.map(s=>{
+      const pct=(s.v/max)*100;
+      return `<div class="bar" title="${s.k}: ${s.v}"><span style="width:${pct}%"></span></div>`;
+    }).join('');
+  }
+
+  function ecoActions(etki,meslek){
+    if(!etki && !meslek) return '';
+    const e=(etki||'').toLowerCase();
+    let tips=[];
+    if(e.includes('eş')||e.includes('partner')) tips.push('Eş onayı: 10 dakikalık ortak özet ve “neden şimdi?” argümanı hazırlayın.');
+    if(e.includes('ortak')) tips.push('Ortak buy-in: 1 sayfalık nakit akışı etkisi + risklerin sınırları.');
+    if(e.includes('aile')) tips.push('Aile etkisi: sade görsel infografik + güven çarpanı (kurumsal itibar, garanti).');
+    if(meslek==='Çiftçi') tips.push('Çiftçi: emtia/tarım döngüsüyle bağ kur; likidite pencerelerini belirt.');
+    if(meslek==='Yatırımcı') tips.push('Yatırımcı: metrik ve bantlarla konuş; karar sonrası “not alma” rutini öner.');
+    if(meslek==='Aile Şirketi') tips.push('Aile şirketi: likidite-kredi hattı ile portföy optimizasyonunu birlikte ele al.');
+    return tips.length?('<ul><li>'+tips.join('</li><li>')+'</li></ul>'):'';
+  }
+
+  function planByGoal(goal,risk){
+    const band=(risk==='Risksever')?'60–80':(risk==='Dengeli')?'40–60':'10–30';
+    if(goal==='Koruma'){
+      return `<ol>
+        <li><strong>Güvenlik bandı:</strong> değişken pay <b>${band}%</b> aralığını aşmayın; 3-6 aylık acil nakit yastığı.</li>
+        <li><strong>Kalkanlar:</strong> kur/puan/teminat risklerine karşı basit koruma araçlarını gözden geçirin.</li>
+        <li><strong>Takvim:</strong> 30 gün sonra kontrol; sapma &gt; %5 ise yeniden dengele.</li>
+      </ol>`;
+    }
+    if(goal==='Büyütme'){
+      return `<ol>
+        <li><strong>Risk bandı:</strong> değişken pay <b>${band}%</b>; kalanını istikrar bileşenlerine dağıt.</li>
+        <li><strong>Takvimli ekleme:</strong> aylık/çeyreklik otomatik katkı; “fırsat kovalamayı” sınırlamak için kural seti.</li>
+        <li><strong>Çeşitlilik:</strong> en az 4-6 farklı tema/varlık; tek yoğunlaşma &gt; %35 olmasın.</li>
+      </ol>`;
+    }
+    if(goal==='Kayıp Telafi'){
+      return `<ol>
+        <li><strong>Fren:</strong> revans davranışını engelle; tek işlem limiti ve bekleme kuralı koy.</li>
+        <li><strong>Aşamalı toparlanma:</strong> küçük dilimlerle geri giriş; her adımda zarar tavanı tanımla.</li>
+        <li><strong>Geri bildirim:</strong> haftalık değerlendirme notu; duygu tetikleyicilerini yaz.</li>
+      </ol>`;
+    }
+    return `<ul><li>Hedefi netleştir; 3 maddeyle ölç.</li><li>Küçük deneme yap, sonuç günlüğü tut.</li><li>30 gün sonra karar toplantısı.</li></ul>`;
+  }
+
+  function simulate(){
+    const d={
+      risk:v('risk'), meslek:v('meslekSecim'), etki:v('etki'), finans:v('finans'),
+      nakit:+(v('nakitYuzde')||0), borc:+(v('borcYuzde')||0), port:+(v('portfoyYuzde')||0),
+      hedef:v('hedef'), hedefYazi:v('hedefYazi'),
+      itiraz:[v('itiraz_kuzey'),v('itiraz_dogu'),v('itiraz_guney'),v('itiraz_bati'),v('itiraz_merkez')].filter(Boolean),
+      nasil:v('nasil')
+    };
+    let north=score('qs-kuzey'), east=score('qs-dogu'), south=score('qs-merkez')?0:0; // keep structure
+    south=score('qs-merkez')?0:0; // placeholder to keep old structure
+    south=0 + (v('finans').includes('Borç')?2:0) + (v('finans').includes('Portföy')?2:0) + (v('finans').includes('Nakit')?1:0);
+    let west=0;
+    if(d.risk==='Muhafazakâr') north+=2;
+    if(d.risk==='Dengeli') north+=1;
+    if(d.risk==='Risksever') west+=2;
+    if(d.hedef==='Koruma') north+=2;
+    if(d.hedef==='Büyütme') west+=2;
+    if(d.hedef==='Kayıp Telafi') west+=1;
+    if(d.port>=50) south+=1;
+    const scores=[{k:'Kuzey',v:north},{k:'Doğu',v:score('qs-dogu')+ (d.etki?1:0)+(d.meslek?1:0)},{k:'Güney',v:south},{k:'Batı',v:score('qs-bati')+west}];
+    // Narrative
+    document.getElementById('simNarrative').innerHTML = narrativeFromScores(scores)
+      + `<div class="badge">Risk Profili</div> ${d.risk||'—'} • <div class="badge">Hedef</div> ${d.hedef||'—'} — ${d.hedefYazi||''}`;
+    // Bars
+    document.getElementById('bars').innerHTML = barHtml(scores);
+    // Plan (goal + ecosystem)
+    const eco = ecoActions(d.etki,d.meslek);
+    document.getElementById('simPlan').innerHTML = `<strong>Aksiyon Planı</strong>${planByGoal(d.hedef,d.risk)} ${eco?('<strong>Paydaş Adımları</strong>'+eco):''} ${(d.nasil?('<p><strong>Çalışma Modu:</strong> '+d.nasil+'</p>'):'')}`;
+    // Itiraz view (only non-empty)
+    const it = d.itiraz;
+    document.getElementById('itirazView').innerHTML = it.length?(`<strong>İtiraz Haritası (En çok 2):</strong> <ul><li>${it.slice(0,2).join('</li><li>')}</li></ul><em>Yanıt Çerçevesi:</em> “Şunu mu diyorsunuz?” → metafor → küçük adım.`):'';
+    document.getElementById('simOut').style.display='block';
+    document.getElementById('simOut').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  document.getElementById('btnSim').addEventListener('click', simulate);
+  document.getElementById('btnPdf').addEventListener('click', ()=>window.print());
+  document.getElementById('btnCsv').addEventListener('click', ()=>{
+    const headers=['Yas','Cinsiyet','Meslek','Gelir','Risk','Kulturel','MeslekTipi','Etki','Finans','Nakit_%','Borc_%','Portfoy_%','Hedef','HedefYazi','Nasil'];
+    const vals=['yas','cinsiyet','meslek','gelir','risk','kulturel','meslekSecim','etki','finans','nakitYuzde','borcYuzde','portfoyYuzde','hedef','hedefYazi','nasil'].map(v);
+    const csv=headers.join(',')+'\n'+vals.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='musteri_pusula.csv';a.click();URL.revokeObjectURL(url);
+  });
+  document.getElementById('btnTemizle').addEventListener('click', ()=>{document.querySelectorAll('input,textarea,select').forEach(el=>{if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';});document.querySelectorAll('input[type=checkbox]').forEach(el=>el.checked=false);document.getElementById('simOut').style.display='none';});
+  document.addEventListener('contextmenu',e=>e.preventDefault());
+</script>
+</body>
+</html>
