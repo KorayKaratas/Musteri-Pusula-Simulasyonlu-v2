@@ -3,14 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Müşteri Pusula – Simülasyonlu v2 (2K Eğitim Danışmanlık | Koray Karataş)</title>
+<title>Müşteri Pusula – Simülasyonlu v3.1 (2K Eğitim Danışmanlık | Koray Karataş)</title>
 <meta name="description" content="Soru setleri + açıklamalı ipuçları + aksiyon odaklı simülasyon planı.">
 <meta name="theme-color" content="#004481">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>'>
 <style>
-  :root{--brand:#004481;--ink:#0f172a;--muted:#6b7280;--border:#cfe8ff;--radius:14px;--shadow:0 8px 24px rgba(0,0,0,.08);}
+  :root{
+    --brand:#004481; --ink:#0f172a; --muted:#6b7280; --border:#cfe8ff;
+    --radius:14px; --shadow:0 8px 24px rgba(0,0,0,.08);
+  }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:#fff;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+  html,body{margin:0;padding:0;background:#fff;color:var(--ink);
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
   .wrap{max-width:1000px;margin:0 auto;padding:16px}
   header{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
   .brand{font-weight:700;color:var(--brand);font-size:14px;letter-spacing:.4px;text-transform:uppercase;text-align:center}
@@ -26,29 +30,51 @@
   input[type="text"],input[type="number"],select,textarea{width:100%;padding:9px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:14px}
   textarea{min-height:76px;resize:vertical}
   .center{display:flex;flex-direction:column;gap:8px;border:2px dashed var(--border);border-radius:var(--radius);padding:12px;background:#fbfdff;box-shadow:var(--shadow)}
-  .actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
-  button,.btn{appearance:none;border:none;background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-  .btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
-  .muted{color:var(--muted);font-size:12px;text-align:center;margin-top:6px}
-  footer{margin:18px 0 8px;text-align:center;color:var(--muted);font-size:12px}
   .tip{font-size:12px;color:#0b3b69;background:#eef6ff;border:1px solid var(--border);padding:6px 8px;border-radius:10px;margin-top:8px}
   .qs{margin-top:8px;border-top:1px dashed var(--border);padding-top:8px}
   .qs h3{margin:0 0 6px;font-size:13px;color:#0b3b69}
   .qs label{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#111827}
   .qs input[type=checkbox]{margin-top:3px}
+  .actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+  button,.btn{appearance:none;border:none;background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+  .btn-outline{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+  .muted{color:var(--muted);font-size:12px;text-align:center;margin-top:6px}
+  footer{margin:18px 0 8px;text-align:center;color:var(--muted);font-size:12px}
   .wm{position:fixed;inset:auto 12px 10px auto;opacity:.08;font-size:64px;color:var(--brand);user-select:none;pointer-events:none}
-  /* Simulation block */
+
+  /* Simülasyon bloğu */
   .sim{margin-top:16px;border:2px solid var(--border);border-radius:14px;padding:12px;background:#f8fbff;box-shadow:var(--shadow)}
   .sim h3{margin:0 0 8px;font-size:16px;color:#004481}
-  .note{font-size:12px;color:#b91c1c}
   .badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;font-size:12px;margin-right:6px;white-space:nowrap}
   .bars{display:flex;gap:6px;margin-top:6px}
   .bar{height:8px;border-radius:6px;background:#e5e7eb;flex:1;position:relative;overflow:hidden}
   .bar>span{position:absolute;left:0;top:0;bottom:0;background:#0ea5e9}
   .line{margin:8px 0;border-top:1px dashed #cbd5e1}
-  /* Print */
-  @media print{ #gate,.actions,.subtitle{display:none!important} .wrap{max-width:100%;padding:0} .grid{grid-template-columns:repeat(2,1fr);gap:10px} .card{break-inside:avoid} }
-  /* Gate */
+  .note{font-size:12px;color:#b91c1c}
+
+  /* Mini yön kılavuzu (legend) — sabit */
+  .legend {
+    position: fixed; right: 12px; bottom: 12px; z-index: 1000;
+    background: #ffffff; border: 2px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 8px 10px; max-width: 260px; font-size: 12px
+  }
+  .legend .row { display:flex; gap:6px; flex-wrap:wrap }
+  .legend .chip { border:1px solid #e5e7eb; border-radius:999px; padding:2px 8px; white-space:nowrap }
+  .legend .k{background:#eef6ff} .legend .d{background:#f0fdf4} .legend .g{background:#fff7ed} .legend .b{background:#fef2f2}
+
+  /* “buy-in” mini açıklaması */
+  .small-info{font-size:12px;color:#0b3b69;display:inline-flex;gap:6px;align-items:center}
+  .small-info .hint{border:1px solid var(--border);padding:2px 6px;border-radius:8px;background:#eef6ff}
+
+  /* Yazdırma */
+  @media print{
+    #gate,.actions,.subtitle,.legend{display:none!important}
+    .wrap{max-width:100%;padding:0}
+    .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .card{break-inside:avoid}
+  }
+
+  /* Şifre kapısı */
   #gate{position:fixed;inset:0;background:rgba(255,255,255,.96);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:9999}
   #gate .box{width:min(460px,92vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:var(--shadow);padding:18px}
   #gate h3{margin:0 0 8px;color:var(--brand)}
@@ -59,7 +85,7 @@
 <body>
 <div class="wm">2K Eğitim Danışmanlık</div>
 
-<!-- Password gate -->
+<!-- ŞİFRE GİRİŞİ (2468) -->
 <div id="gate" aria-modal="true" role="dialog">
   <div class="box">
     <h3>🧭 Müşteri Pusula — Erişim</h3>
@@ -77,12 +103,12 @@
 <div class="wrap">
   <header>
     <div class="brand">2K Eğitim Danışmanlık | Koray Karataş</div>
-    <h1>Müşteri Pusula • Simülasyonlu v2</h1>
-    <div class="subtitle">“Pusulayı doldururken öğren — soru setleri + açıklamalar + **aksiyon planı**.”</div>
+    <h1>Müşteri Pusula • Simülasyonlu v3.1</h1>
+    <div class="subtitle">“Pusulayı doldururken öğren — soru setleri + açıklamalar + <strong>aksiyon planı</strong>.”</div>
   </header>
 
   <div class="grid">
-    <!-- Kuzey -->
+    <!-- KUZEY -->
     <section class="card" id="kuzey">
       <h2>Kuzey — Müşteri Profili <span class="bubble">Demografik + Psikografik</span></h2>
       <div class="row">
@@ -109,9 +135,12 @@
       <label>İtiraz (Kuzey)</label><input type="text" id="itiraz_kuzey" placeholder="Örn. ‘Faiz yüksek, girmeyelim’">
     </section>
 
-    <!-- Doğu -->
+    <!-- DOĞU -->
     <section class="card" id="dogu">
       <h2>Doğu — Ekosistem <span class="bubble">Kiminle karar?</span></h2>
+      <div class="small-info">
+        <span class="hint"><strong>Buy-in nedir?</strong> Kararı etkileyecek kişinin (eş/ortak/aile) fikre duygusal ve zihinsel olarak <em>sahip çıkması</em>. Yani: “Evet, bu bizim kararımız.”</span>
+      </div>
       <label>Meslek Tipi</label>
       <select id="meslekSecim"><option value="" selected disabled>Seçin…</option><option>Çiftçi</option><option>Tüccar</option><option>Yatırımcı</option><option>Aile Şirketi</option><option>Profesyonel</option></select>
       <label>Kimin etkisi altında?</label><input type="text" id="etki" placeholder="Eş, ortak, pazar, tedarikçi...">
@@ -126,7 +155,7 @@
       <label>İtiraz (Doğu)</label><input type="text" id="itiraz_dogu" placeholder="Örn. ‘Eşim istemez, ortağım karşı’">
     </section>
 
-    <!-- Güney -->
+    <!-- GÜNEY -->
     <section class="card" id="guney">
       <h2>Güney — Finansal Konum <span class="bubble">Nerede duruyor?</span></h2>
       <label>Genel Durum</label>
@@ -140,18 +169,29 @@
       <label>İtiraz (Güney)</label><input type="text" id="itiraz_guney" placeholder="Örn. ‘Likidite bozulur, borcu çeviremem’">
     </section>
 
-    <!-- Batı -->
+    <!-- BATI -->
     <section class="card" id="bati">
       <h2>Batı — Hedefler <span class="bubble">Ne istiyor?</span></h2>
       <label>Ana Hedef</label>
       <select id="hedef"><option value="" selected disabled>Seçin…</option><option>Koruma</option><option>Büyütme</option><option>Kayıp Telafi</option></select>
       <label>Hedef Yazısı</label><textarea id="hedefYazi" placeholder="Emeklilik, ev, pasif gelir…"></textarea>
       <div class="tip">Koruma→kalkan; Büyüme→yol haritası; Telafi→davranışsal fren.</div>
+
+      <!-- GERİ EKLENEN BLOK: Soru Seti (Batı) -->
+      <div class="qs" id="qs-bati">
+        <h3>Soru Seti (Batı)</h3>
+        <label><input type="checkbox" value="1"> Zaman ufku net mi (1–3–5 yıl)?</label>
+        <label><input type="checkbox" value="1"> Hedef tutarı/geliri somut mu?</label>
+        <label><input type="checkbox" value="1"> Risk–ödül dengesi hedefle uyumlu mu?</label>
+        <label><input type="checkbox" value="1"> Kayıp sonrası “revans” eğilimi var mı?</label>
+        <label><input type="checkbox" value="1"> Otomatik birikim/planlamaya açık mı?</label>
+      </div>
+
       <label>İtiraz (Batı)</label><input type="text" id="itiraz_bati" placeholder="Örn. ‘Geç kaldım, nasıl yetişir?’">
     </section>
   </div>
 
-  <!-- Merkez -->
+  <!-- MERKEZ -->
   <section class="center" id="merkez" style="margin-top:14px">
     <h2>Merkez — Uygulama Yöntemi (Nasıl)</h2>
     <textarea id="nasil" placeholder="Öneri / yaklaşım / eylem adımı…"></textarea>
@@ -188,25 +228,53 @@
   <footer>Bu içerik 5846 sayılı FSEK kapsamındadır. <strong>İzinsiz kopyalanamaz, çoğaltılamaz, dağıtılamaz.</strong><br>© 2K Eğitim Danışmanlık | Koray Karataş — Tüm hakları saklıdır.</footer>
 </div>
 
-<script>
-  // Password gate (2468)
-  (function(){const ok=document.getElementById('pwOk'),cancel=document.getElementById('pwCancel'),input=document.getElementById('pw'),err=document.getElementById('pwErr'),gate=document.getElementById('gate');function check(){if(input.value==='2468'){gate.style.display='none';}else{err.textContent='Şifre hatalı. Tekrar deneyin.';input.focus();input.select();}}ok.addEventListener('click',check);input.addEventListener('keydown',e=>{if(e.key==='Enter')check();});cancel.addEventListener('click',()=>location.href='https://google.com');})();
+<!-- Ekranın sağ altına sabit Yön Kılavuzu -->
+<div class="legend" aria-label="Yön açıklamaları">
+  <div style="font-weight:600; color:#004481; margin-bottom:4px;">🧭 Yön Kılavuzu</div>
+  <div class="row">
+    <span class="chip k">Kuzey • Profil (Kimlik)</span>
+    <span class="chip d">Doğu • Ekosistem (Kiminle?)</span>
+    <span class="chip g">Güney • Finansal Konum</span>
+    <span class="chip b">Batı • Hedefler (Ne istiyor?)</span>
+  </div>
+</div>
 
-  function score(id){return [...document.querySelectorAll('#'+id+' input[type=checkbox]:checked')].length;}
-  function v(id){const el=document.getElementById(id);return el?el.value:'';}
+<script>
+  /* Şifre (2468) */
+  (function(){
+    const ok=document.getElementById('pwOk'),
+          cancel=document.getElementById('pwCancel'),
+          input=document.getElementById('pw'),
+          err=document.getElementById('pwErr'),
+          gate=document.getElementById('gate');
+    function check(){
+      if(input.value==='2468'){ gate.style.display='none'; }
+      else { err.textContent='Şifre hatalı. Tekrar deneyin.'; input.focus(); input.select(); }
+    }
+    ok.addEventListener('click',check);
+    input.addEventListener('keydown',e=>{ if(e.key==='Enter') check(); });
+    cancel.addEventListener('click',()=> location.href='https://google.com');
+  })();
+
+  /* Yardımcılar */
+  function score(id){ return [...document.querySelectorAll('#'+id+' input[type=checkbox]:checked')].length; }
+  function v(id){ const el=document.getElementById(id); return el?el.value:''; }
+
+  /* Yön sözlüğü: anlam ve koç yorumu */
+  const DIR = {
+    'Kuzey': { label: 'Profil (Kimlik)',    coach: 'Güven ve çerçeveleme ile ilerleyin.' },
+    'Doğu' : { label: 'Ekosistem',          coach: 'Paydaş onayı (buy-in) şart.' },
+    'Güney': { label: 'Finansal konum',     coach: 'Likidite/borç gerçekleri kararı belirler.' },
+    'Batı' : { label: 'Hedefler',           coach: 'Yol haritası + takvim motivasyon sağlar.' }
+  };
+  function dirFull(k){ return `${k} — ${DIR[k]?.label||''}` }
 
   function narrativeFromScores(scores){
-    const labels={Kuzey:'Profil (Kimlik)',Doğu:'Ekosistem',Güney:'Finansal konum',Batı:'Hedefler'};
     const sorted=[...scores].sort((a,b)=>b.v-a.v);
     const top=sorted[0], second=sorted[1];
-    const commentTop={
-      'Kuzey':'Profil dili baskın: güven ve çerçeveleme ile ilerleyin.',
-      'Doğu':'Sosyal/onay ihtiyacı yüksek: paydaş buy-in şart.',
-      'Güney':'Mevcut pozisyon baskın: likidite/borç gerçekleri karar dilini belirler.',
-      'Batı':'Hedef dili baskın: yol haritası ve takvim motivasyonu artırır.'
-    }[top.k];
-    const tie = (top.v===second.v) ? ` (Not: ${top.k} ile ${second.k} skorları yakın; dilinizi iki eksende kurun.)` : '';
-    return `Baskın yön: <strong>${top.k}</strong> — ${commentTop}${tie}`;
+    const tie=(top.v===second.v)?` (Not: ${top.k} ile ${second.k} yakın; dili iki eksende kurun.)`:'';
+    const coach = DIR[top.k]?.coach || '';
+    return `Baskın yön: <strong>${dirFull(top.k)}</strong> — ${coach}${tie}`;
   }
 
   function barHtml(scores){
@@ -222,8 +290,8 @@
     const e=(etki||'').toLowerCase();
     let tips=[];
     if(e.includes('eş')||e.includes('partner')) tips.push('Eş onayı: 10 dakikalık ortak özet ve “neden şimdi?” argümanı hazırlayın.');
-    if(e.includes('ortak')) tips.push('Ortak buy-in: 1 sayfalık nakit akışı etkisi + risklerin sınırları.');
-    if(e.includes('aile')) tips.push('Aile etkisi: sade görsel infografik + güven çarpanı (kurumsal itibar, garanti).');
+    if(e.includes('ortak')) tips.push('Ortak buy-in: 1 sayfalık nakit akışı etkisi + risk sınırları.');
+    if(e.includes('aile')) tips.push('Aile etkisi: sade infografik + güven çarpanı (kurumsal itibar, garanti).');
     if(meslek==='Çiftçi') tips.push('Çiftçi: emtia/tarım döngüsüyle bağ kur; likidite pencerelerini belirt.');
     if(meslek==='Yatırımcı') tips.push('Yatırımcı: metrik ve bantlarla konuş; karar sonrası “not alma” rutini öner.');
     if(meslek==='Aile Şirketi') tips.push('Aile şirketi: likidite-kredi hattı ile portföy optimizasyonunu birlikte ele al.');
@@ -234,21 +302,21 @@
     const band=(risk==='Risksever')?'60–80':(risk==='Dengeli')?'40–60':'10–30';
     if(goal==='Koruma'){
       return `<ol>
-        <li><strong>Güvenlik bandı:</strong> değişken pay <b>${band}%</b> aralığını aşmayın; 3-6 aylık acil nakit yastığı.</li>
-        <li><strong>Kalkanlar:</strong> kur/puan/teminat risklerine karşı basit koruma araçlarını gözden geçirin.</li>
+        <li><strong>Güvenlik bandı:</strong> değişken pay <b>${band}%</b>; 3–6 aylık acil nakit yastığı.</li>
+        <li><strong>Kalkanlar:</strong> kur/puan/teminat riskleri için basit koruma araçlarını gözden geçirin.</li>
         <li><strong>Takvim:</strong> 30 gün sonra kontrol; sapma &gt; %5 ise yeniden dengele.</li>
       </ol>`;
     }
     if(goal==='Büyütme'){
       return `<ol>
-        <li><strong>Risk bandı:</strong> değişken pay <b>${band}%</b>; kalanını istikrar bileşenlerine dağıt.</li>
-        <li><strong>Takvimli ekleme:</strong> aylık/çeyreklik otomatik katkı; “fırsat kovalamayı” sınırlamak için kural seti.</li>
-        <li><strong>Çeşitlilik:</strong> en az 4-6 farklı tema/varlık; tek yoğunlaşma &gt; %35 olmasın.</li>
+        <li><strong>Risk bandı:</strong> değişken pay <b>${band}%</b>; kalanı istikrar bileşenlerine dağıt.</li>
+        <li><strong>Takvimli ekleme:</strong> aylık/çeyreklik otomatik katkı; “fırsat kovalamayı” sınırlayan kural seti.</li>
+        <li><strong>Çeşitlilik:</strong> en az 4–6 tema/varlık; tek yoğunlaşma ≤ %35.</li>
       </ol>`;
     }
     if(goal==='Kayıp Telafi'){
       return `<ol>
-        <li><strong>Fren:</strong> revans davranışını engelle; tek işlem limiti ve bekleme kuralı koy.</li>
+        <li><strong>Fren:</strong> revans davranışını engelle; işlem limiti ve bekleme kuralı koy.</li>
         <li><strong>Aşamalı toparlanma:</strong> küçük dilimlerle geri giriş; her adımda zarar tavanı tanımla.</li>
         <li><strong>Geri bildirim:</strong> haftalık değerlendirme notu; duygu tetikleyicilerini yaz.</li>
       </ol>`;
@@ -260,46 +328,75 @@
     const d={
       risk:v('risk'), meslek:v('meslekSecim'), etki:v('etki'), finans:v('finans'),
       nakit:+(v('nakitYuzde')||0), borc:+(v('borcYuzde')||0), port:+(v('portfoyYuzde')||0),
-      hedef:v('hedef'), hedefYazi:v('hedefYazi'),
-      itiraz:[v('itiraz_kuzey'),v('itiraz_dogu'),v('itiraz_guney'),v('itiraz_bati'),v('itiraz_merkez')].filter(Boolean),
-      nasil:v('nasil')
+      hedef:v('hedef'), hedefYazi:v('hedefYazi'), nasil:v('nasil'),
+      itiraz_kuzey:v('itiraz_kuzey'), itiraz_dogu:v('itiraz_dogu'),
+      itiraz_guney:v('itiraz_guney'), itiraz_bati:v('itiraz_bati'), itiraz_merkez:v('itiraz_merkez')
     };
-    let north=score('qs-kuzey'), east=score('qs-dogu'), south=score('qs-merkez')?0:0; // keep structure
-    south=score('qs-merkez')?0:0; // placeholder to keep old structure
-    south=0 + (v('finans').includes('Borç')?2:0) + (v('finans').includes('Portföy')?2:0) + (v('finans').includes('Nakit')?1:0);
-    let west=0;
+
+    // Skorlar
+    let north=score('qs-kuzey');
+    let east =score('qs-dogu') + (d.etki?1:0) + (d.meslek?1:0);
+    let south=0 + (d.finans.includes('Borç')?2:0) + (d.finans.includes('Portföy')?2:0) + (d.finans.includes('Nakit')?1:0);
+    if(d.port>=50) south+=1;
+    let west =score('qs-bati')||0;
+
     if(d.risk==='Muhafazakâr') north+=2;
     if(d.risk==='Dengeli') north+=1;
     if(d.risk==='Risksever') west+=2;
     if(d.hedef==='Koruma') north+=2;
     if(d.hedef==='Büyütme') west+=2;
     if(d.hedef==='Kayıp Telafi') west+=1;
-    if(d.port>=50) south+=1;
-    const scores=[{k:'Kuzey',v:north},{k:'Doğu',v:score('qs-dogu')+ (d.etki?1:0)+(d.meslek?1:0)},{k:'Güney',v:south},{k:'Batı',v:score('qs-bati')+west}];
-    // Narrative
-    document.getElementById('simNarrative').innerHTML = narrativeFromScores(scores)
-      + `<div class="badge">Risk Profili</div> ${d.risk||'—'} • <div class="badge">Hedef</div> ${d.hedef||'—'} — ${d.hedefYazi||''}`;
-    // Bars
+
+    const scores=[{k:'Kuzey',v:north},{k:'Doğu',v:east},{k:'Güney',v:south},{k:'Batı',v:west}];
+
+    // Anlatım + kısa sözlük
+    document.getElementById('simNarrative').innerHTML =
+      narrativeFromScores(scores)
+      + `<div style="margin-top:6px"><span class="badge">Risk Profili</span> ${d.risk||'—'} • <span class="badge">Hedef</span> ${d.hedef||'—'}${d.hedefYazi?(' — '+d.hedefYazi):''}</div>`
+      + `<div style="margin-top:6px;font-size:12px;color:#475569">
+           <strong>Yönler:</strong> Kuzey=Profil · Doğu=Ekosistem · Güney=Finansal Konum · Batı=Hedefler
+         </div>`;
+
+    // Barlar
     document.getElementById('bars').innerHTML = barHtml(scores);
-    // Plan (goal + ecosystem)
+
+    // Plan + Ekosistem adımları + çalışma modu
     const eco = ecoActions(d.etki,d.meslek);
-    document.getElementById('simPlan').innerHTML = `<strong>Aksiyon Planı</strong>${planByGoal(d.hedef,d.risk)} ${eco?('<strong>Paydaş Adımları</strong>'+eco):''} ${(d.nasil?('<p><strong>Çalışma Modu:</strong> '+d.nasil+'</p>'):'')}`;
-    // Itiraz view (only non-empty)
-    const it = d.itiraz;
-    document.getElementById('itirazView').innerHTML = it.length?(`<strong>İtiraz Haritası (En çok 2):</strong> <ul><li>${it.slice(0,2).join('</li><li>')}</li></ul><em>Yanıt Çerçevesi:</em> “Şunu mu diyorsunuz?” → metafor → küçük adım.`):'';
+    document.getElementById('simPlan').innerHTML =
+      `<strong>Önerilen Yaklaşım</strong>${planByGoal(d.hedef,d.risk)}`
+      + `${eco?('<strong>Paydaş Adımları</strong>'+eco):''}`
+      + `${d.nasil?('<p><strong>Çalışma Modu:</strong> '+d.nasil+'</p>'):''}`;
+
+    // İtiraz (boş göstermeden, max 2 madde)
+    const nonEmptyItiraz = [d.itiraz_kuzey,d.itiraz_dogu,d.itiraz_guney,d.itiraz_bati,d.itiraz_merkez].filter(Boolean);
+    document.getElementById('itirazView').innerHTML = nonEmptyItiraz.length
+      ? (`<strong>İtiraz Haritası (en çok 2):</strong> <ul><li>${nonEmptyItiraz.slice(0,2).join('</li><li>')}</li></ul>
+          <em>Yanıt çerçevesi:</em> “Şunu mu diyorsunuz?” → metafor → küçük adım`)
+      : '';
+
+    // Göster ve kaydır
     document.getElementById('simOut').style.display='block';
     document.getElementById('simOut').scrollIntoView({behavior:'smooth',block:'start'});
   }
 
+  // Olaylar
   document.getElementById('btnSim').addEventListener('click', simulate);
   document.getElementById('btnPdf').addEventListener('click', ()=>window.print());
   document.getElementById('btnCsv').addEventListener('click', ()=>{
     const headers=['Yas','Cinsiyet','Meslek','Gelir','Risk','Kulturel','MeslekTipi','Etki','Finans','Nakit_%','Borc_%','Portfoy_%','Hedef','HedefYazi','Nasil'];
-    const vals=['yas','cinsiyet','meslek','gelir','risk','kulturel','meslekSecim','etki','finans','nakitYuzde','borcYuzde','portfoyYuzde','hedef','hedefYazi','nasil'].map(v);
+    const vals   =['yas','cinsiyet','meslek','gelir','risk','kulturel','meslekSecim','etki','finans','nakitYuzde','borcYuzde','portfoyYuzde','hedef','hedefYazi','nasil'].map(v);
     const csv=headers.join(',')+'\n'+vals.map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',');
-    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='musteri_pusula.csv';a.click();URL.revokeObjectURL(url);
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a');
+    a.href=url; a.download='musteri_pusula.csv'; a.click(); URL.revokeObjectURL(url);
   });
-  document.getElementById('btnTemizle').addEventListener('click', ()=>{document.querySelectorAll('input,textarea,select').forEach(el=>{if(el.tagName==='SELECT')el.selectedIndex=0;else el.value='';});document.querySelectorAll('input[type=checkbox]').forEach(el=>el.checked=false);document.getElementById('simOut').style.display='none';});
+  document.getElementById('btnTemizle').addEventListener('click', ()=>{
+    document.querySelectorAll('input,textarea,select').forEach(el=>{ if(el.tagName==='SELECT')el.selectedIndex=0; else el.value=''; });
+    document.querySelectorAll('input[type=checkbox]').forEach(el=>el.checked=false);
+    document.getElementById('simOut').style.display='none';
+  });
+
+  // Sağ tık kapalı (caydırıcı)
   document.addEventListener('contextmenu',e=>e.preventDefault());
 </script>
 </body>
