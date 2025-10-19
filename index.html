@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Müşteri Pusula – Simülasyonlu v3.1 (2K Eğitim Danışmanlık | Koray Karataş)</title>
+<title>Müşteri Pusula – Simülasyonlu v3.2 (2K Eğitim Danışmanlık | Koray Karataş)</title>
 <meta name="description" content="Soru setleri + açıklamalı ipuçları + aksiyon odaklı simülasyon planı.">
 <meta name="theme-color" content="#004481">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>'>
@@ -52,15 +52,19 @@
   .line{margin:8px 0;border-top:1px dashed #cbd5e1}
   .note{font-size:12px;color:#b91c1c}
 
-  /* Mini yön kılavuzu (legend) — sabit */
+  /* Mini yön kılavuzu (legend) — yüzen ve sürüklenebilir */
   .legend {
     position: fixed; right: 12px; bottom: 12px; z-index: 1000;
     background: #ffffff; border: 2px solid var(--border); border-radius: 12px;
-    box-shadow: var(--shadow); padding: 8px 10px; max-width: 260px; font-size: 12px
+    box-shadow: var(--shadow); padding: 8px 10px; max-width: 260px; font-size: 12px;
+    touch-action: none; cursor: grab;
   }
+  .legend.dragging { cursor: grabbing; opacity: .95 }
   .legend .row { display:flex; gap:6px; flex-wrap:wrap }
   .legend .chip { border:1px solid #e5e7eb; border-radius:999px; padding:2px 8px; white-space:nowrap }
   .legend .k{background:#eef6ff} .legend .d{background:#f0fdf4} .legend .g{background:#fff7ed} .legend .b{background:#fef2f2}
+  .legend .lg-title{font-weight:600; color:#004481; margin-bottom:4px; display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .legend .lg-title button{border:none;background:transparent;font-size:16px;line-height:1;cursor:pointer;color:#475569}
 
   /* “buy-in” mini açıklaması */
   .small-info{font-size:12px;color:#0b3b69;display:inline-flex;gap:6px;align-items:center}
@@ -103,7 +107,7 @@
 <div class="wrap">
   <header>
     <div class="brand">2K Eğitim Danışmanlık | Koray Karataş</div>
-    <h1>Müşteri Pusula • Simülasyonlu v3.1</h1>
+    <h1>Müşteri Pusula • Simülasyonlu v3.2</h1>
     <div class="subtitle">“Pusulayı doldururken öğren — soru setleri + açıklamalar + <strong>aksiyon planı</strong>.”</div>
   </header>
 
@@ -177,7 +181,7 @@
       <label>Hedef Yazısı</label><textarea id="hedefYazi" placeholder="Emeklilik, ev, pasif gelir…"></textarea>
       <div class="tip">Koruma→kalkan; Büyüme→yol haritası; Telafi→davranışsal fren.</div>
 
-      <!-- GERİ EKLENEN BLOK: Soru Seti (Batı) -->
+      <!-- Soru Seti (Batı) -->
       <div class="qs" id="qs-bati">
         <h3>Soru Seti (Batı)</h3>
         <label><input type="checkbox" value="1"> Zaman ufku net mi (1–3–5 yıl)?</label>
@@ -228,10 +232,13 @@
   <footer>Bu içerik 5846 sayılı FSEK kapsamındadır. <strong>İzinsiz kopyalanamaz, çoğaltılamaz, dağıtılamaz.</strong><br>© 2K Eğitim Danışmanlık | Koray Karataş — Tüm hakları saklıdır.</footer>
 </div>
 
-<!-- Ekranın sağ altına sabit Yön Kılavuzu -->
-<div class="legend" aria-label="Yön açıklamaları">
-  <div style="font-weight:600; color:#004481; margin-bottom:4px;">🧭 Yön Kılavuzu</div>
-  <div class="row">
+<!-- Ekranda yüzen ve sürüklenebilir Yön Kılavuzu -->
+<div class="legend" id="legend" aria-label="Yön açıklamaları">
+  <div class="lg-title">
+    <span>🧭 Yön Kılavuzu</span>
+    <button id="lgMin" title="Küçült/Büyüt">–</button>
+  </div>
+  <div class="row" id="lgBody">
     <span class="chip k">Kuzey • Profil (Kimlik)</span>
     <span class="chip d">Doğu • Ekosistem (Kiminle?)</span>
     <span class="chip g">Güney • Finansal Konum</span>
@@ -240,16 +247,28 @@
 </div>
 
 <script>
-  /* Şifre (2468) */
+  /* Şifre (2468) — kalıcı açma */
   (function(){
     const ok=document.getElementById('pwOk'),
           cancel=document.getElementById('pwCancel'),
           input=document.getElementById('pw'),
           err=document.getElementById('pwErr'),
           gate=document.getElementById('gate');
+    const KEY_UNLOCK='mp_unlocked_v32';
+
+    // Eğer daha önce açılmışsa şifre kapısını göstermeyelim
+    try{
+      if(localStorage.getItem(KEY_UNLOCK)==='1'){ gate.style.display='none'; }
+    }catch(_){/* storage kapalı olabilir */ }
+
     function check(){
-      if(input.value==='2468'){ gate.style.display='none'; }
-      else { err.textContent='Şifre hatalı. Tekrar deneyin.'; input.focus(); input.select(); }
+      if(input.value==='2468'){
+        gate.style.display='none';
+        try{ localStorage.setItem(KEY_UNLOCK,'1'); }catch(_){}
+      }else{
+        err.textContent='Şifre hatalı. Tekrar deneyin.';
+        input.focus(); input.select();
+      }
     }
     ok.addEventListener('click',check);
     input.addEventListener('keydown',e=>{ if(e.key==='Enter') check(); });
@@ -398,6 +417,92 @@
 
   // Sağ tık kapalı (caydırıcı)
   document.addEventListener('contextmenu',e=>e.preventDefault());
+
+  // === Yüzen Yön Kılavuzu: Sürükle/Bırak + Konum Kaydı ===
+  (function(){
+    const el = document.getElementById('legend');
+    const body = document.getElementById('lgBody');
+    const btnMin = document.getElementById('lgMin');
+    const KEY_POS = 'mp_legend_pos_v32';
+    const KEY_MIN = 'mp_legend_min_v32';
+
+    // Başlangıç: kaydedilmiş konum
+    try{
+      const saved = JSON.parse(localStorage.getItem(KEY_POS)||'null');
+      if(saved && typeof saved.left==='number' && typeof saved.top==='number'){
+        el.style.left = saved.left + 'px';
+        el.style.top  = saved.top  + 'px';
+        el.style.right = 'auto';
+        el.style.bottom= 'auto';
+      }
+      const min = localStorage.getItem(KEY_MIN)==='1';
+      if(min){ body.style.display='none'; btnMin.textContent='+'; }
+    }catch(_){}
+
+    let startX=0,startY=0,origLeft=0,origTop=0,dragging=false;
+
+    function onPointerDown(e){
+      dragging=true; el.classList.add('dragging');
+      const rect = el.getBoundingClientRect();
+      startX = ('touches' in e)? e.touches[0].clientX : e.clientX;
+      startY = ('touches' in e)? e.touches[0].clientY : e.clientY;
+      // Eğer left/top ayarlı değilse mevcut computed pozisyonu baz al
+      const computed = window.getComputedStyle(el);
+      origLeft = rect.left - parseFloat(computed.marginLeft||0);
+      origTop  = rect.top  - parseFloat(computed.marginTop||0);
+      // sağ/alt sabitlemelerini bırak
+      el.style.right='auto'; el.style.bottom='auto';
+      window.addEventListener('mousemove',onPointerMove,{passive:false});
+      window.addEventListener('touchmove',onPointerMove,{passive:false});
+      window.addEventListener('mouseup',onPointerUp,{passive:false});
+      window.addEventListener('touchend',onPointerUp,{passive:false});
+    }
+
+    function onPointerMove(e){
+      if(!dragging) return;
+      const x = ('touches' in e)? e.touches[0].clientX : e.clientX;
+      const y = ('touches' in e)? e.touches[0].clientY : e.clientY;
+      const dx = x - startX;
+      const dy = y - startY;
+      let left = origLeft + dx;
+      let top  = origTop  + dy;
+      // viewport sınırları içinde tut
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const r  = el.getBoundingClientRect();
+      const w = r.width, h = r.height;
+      left = Math.max(6, Math.min(vw - w - 6, left));
+      top  = Math.max(6, Math.min(vh - h - 6, top));
+      el.style.left = left + 'px';
+      el.style.top  = top  + 'px';
+      e.preventDefault();
+    }
+
+    function onPointerUp(){
+      if(!dragging) return;
+      dragging=false; el.classList.remove('dragging');
+      // pozisyonu kaydet
+      try{
+        const rect = el.getBoundingClientRect();
+        localStorage.setItem(KEY_POS, JSON.stringify({left: rect.left, top: rect.top}));
+      }catch(_){}
+      window.removeEventListener('mousemove',onPointerMove);
+      window.removeEventListener('touchmove',onPointerMove);
+      window.removeEventListener('mouseup',onPointerUp);
+      window.removeEventListener('touchend',onPointerUp);
+    }
+
+    // Minimize/restore
+    btnMin.addEventListener('click', ()=>{
+      const isHidden = body.style.display==='none';
+      body.style.display = isHidden ? '' : 'none';
+      btnMin.textContent = isHidden ? '–' : '+';
+      try{ localStorage.setItem(KEY_MIN, isHidden ? '0':'1'); }catch(_){}
+    });
+
+    // Drag başlangıcını hem kutuya hem başlığa bağla
+    el.addEventListener('mousedown', onPointerDown);
+    el.addEventListener('touchstart', onPointerDown, {passive:false});
+  })();
 </script>
 </body>
 </html>
